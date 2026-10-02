@@ -93,16 +93,16 @@ if not df_deprem.empty:
     tab1, tab2, tab3 = st.tabs(["🗺️ Harita", "🧊 3D Kesit", "📋 Veri Listesi"])
 
     with tab1:
-        fig_map = px.scatter_mapbox(
+        fig_map = px.scatter_map(
             df_filtered, lat="Enlem", lon="Boylam", color="Risk_Kategorisi",
-            color_discrete_map=renk_haritasi, size="Büyüklük", 
+            color_discrete_map=renk_haritasi, size="Büyüklük",
             hover_name="Yer",
             hover_data={"Derinlik": True, "Tarih": True, "Büyüklük": True},
             size_max=15, zoom=5.5, center={"lat": 39.0, "lon": 38.5},
-            mapbox_style="carto-positron"
+            map_style="carto-positron"
         )
         if fay_verisi:
-            fig_map.update_layout(mapbox_layers=[{
+            fig_map.update_layout(map_layers=[{
                 "sourcetype": "geojson", "source": fay_verisi, "type": "line", 
                 "color": "red", "line": {"width": 1.5}
             }])
@@ -112,7 +112,7 @@ if not df_deprem.empty:
             margin={"r":0,"t":0,"l":0,"b":0},
             legend=ortak_lejant_ayari
         )
-        st.plotly_chart(fig_map, use_container_width=True)
+        st.plotly_chart(fig_map, width="stretch")
 
     with tab2:
         df_filtered['Derinlik_Neg'] = df_filtered['Derinlik'] * -1
@@ -128,10 +128,10 @@ if not df_deprem.empty:
             margin={"r":0,"t":0,"l":0,"b":0},
             legend=ortak_lejant_ayari
         )
-        st.plotly_chart(fig_3d, use_container_width=True)
+        st.plotly_chart(fig_3d, width="stretch")
 
     with tab3:
-        st.dataframe(df_filtered.drop(columns=['Risk_Kategorisi', 'Derinlik_Neg'] if 'Derinlik_Neg' in df_filtered else ['Risk_Kategorisi']), use_container_width=True, hide_index=True)
+        st.dataframe(df_filtered.drop(columns=['Risk_Kategorisi', 'Derinlik_Neg'] if 'Derinlik_Neg' in df_filtered else ['Risk_Kategorisi']), width="stretch", hide_index=True)
 
 else:
     st.error("Veri yüklenemedi. Lütfen CSV bağlantısını ve dosya içeriğini kontrol edin.")
